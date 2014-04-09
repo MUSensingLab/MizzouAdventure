@@ -95,7 +95,7 @@ public class MainActivity extends Activity
 	
 	private float avgTemp = 0;
 	private float avgEDA = 0;
-	
+	private final String USER_INPUT_HINT = "Please input 4 digits for UserID!";
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	
@@ -136,6 +136,7 @@ public class MainActivity extends Activity
  
 				// set prompts.xml to alertdialog builder
 				alertDialogBuilder.setView(promptsView);
+				alertDialogBuilder.setMessage(USER_INPUT_HINT);
  
 				final EditText userInput = (EditText) promptsView
 						.findViewById(R.id.editTextDialogUserInput);
@@ -171,7 +172,11 @@ public class MainActivity extends Activity
 
 			public void onClick(View v) {
 				if (!UID.equals("null")){
-					startFlag = true;
+					if (UID.length()!=4){
+						Toast.makeText(getApplicationContext(),"User ID must be 4 digits.",Toast.LENGTH_LONG).show();
+					}
+					else
+						startFlag = true;
 //					if (TempList!=null)
 //						TempList.clear();
 //					if (EDAList!=null)
@@ -353,7 +358,7 @@ public class MainActivity extends Activity
 //	                	Log.d("addTest","-----"+ splitString.length +"--------");
 		                filename = "WristSensor"+UID+".txt";
 						transmitData=new TransmitData();
-						transmitData.execute(filename,datatoWrite);
+						transmitData.execute(UID,datatoWrite);
 	                	File f = new File(BASE_PATH, filename);
 	                	try {
 							writeToFile(f,datatoWrite);
@@ -407,7 +412,7 @@ public class MainActivity extends Activity
 		@Override
 		protected Boolean doInBackground(String... strings) {
 			// TODO Auto-generated method stub
-			 String fileName=strings[0];
+			 String tuid=strings[0];
 	         String dataToSend=strings[1];
 	         if(checkDataConnectivity())
 	 		{
@@ -415,7 +420,7 @@ public class MainActivity extends Activity
 	         //HttpPost request = new HttpPost("http://dslsrv8.cs.missouri.edu/~rs79c/Server/Test/writeArrayToFile.php");
 	         List<NameValuePair> params = new ArrayList<NameValuePair>();
 	         //file_name 
-	         params.add(new BasicNameValuePair("file_name",fileName));        
+	         params.add(new BasicNameValuePair("uid",tuid));        
 	         //data                       
 	         params.add(new BasicNameValuePair("data",dataToSend));
 	         try {
