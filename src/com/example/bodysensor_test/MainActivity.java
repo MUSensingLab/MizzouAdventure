@@ -85,7 +85,7 @@ public class MainActivity extends Activity
 	
 	public String datatoWrite;
 	private TransmitData transmitData;
-	
+	private DeviceConnect SensorConnect;
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	
@@ -175,6 +175,8 @@ public class MainActivity extends Activity
 				UID = "null";
 				tvUID.setText(UID);
 				transmitData.cancel(true);
+				SensorConnect.disconnect();
+				tvSetData.setText("not connected");
 			}
 	});
         
@@ -291,10 +293,10 @@ public class MainActivity extends Activity
 	                byte[] readBuf = (byte[]) msg.obj;
 	                // construct a string from the valid bytes in the buffer
 	                String readMessage = new String(readBuf, 0, msg.arg1);
-	                Log.d("addTest",readMessage);
+//	                Log.d("addTest",readMessage);
 	                readMessage = replaceBlank(readMessage);
-	                	Log.d("addTest",readMessage);
-	                	Log.d("addTest","-------------");
+//	                	Log.d("addTest",readMessage);
+//	                	Log.d("addTest","-------------");
 	                String[] splitString = readMessage.split(",");
 	                if(splitString.length == 7 && Math.abs(Float.parseFloat(splitString[3]))<=2.0) {
 		                try {
@@ -341,7 +343,7 @@ public class MainActivity extends Activity
                 String address = data.getExtras().getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);                
                 BluetoothDevice device = btAdapter.getRemoteDevice(address);
                 Toast.makeText(getApplicationContext(),"Trying to connect to"+ device.getName(), Toast.LENGTH_LONG).show();
-                DeviceConnect SensorConnect;
+                
                 SensorConnect=new DeviceConnect(mHandler);
                 SensorConnect.connect(address);
                 

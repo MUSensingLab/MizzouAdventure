@@ -53,6 +53,15 @@ public class DeviceConnect {
 		}
 	}
     
+    public void disconnect(){
+    	// Cancel any thread attempting to make a connection
+		if (mConnectThread != null) {mConnectThread.cancel(); mConnectThread = null;}
+
+		// Cancel any thread currently running a connection
+		if (mConnectedThread != null) {mConnectedThread.cancel(); mConnectedThread = null;}
+		setState(STATE_NONE);
+    }
+    
     private synchronized void setState(int state)
     {
         mState = state;
