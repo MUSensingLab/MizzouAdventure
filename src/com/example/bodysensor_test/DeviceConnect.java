@@ -62,6 +62,7 @@ public class DeviceConnect {
 		setState(STATE_NONE);
     }
     
+    
     private synchronized void setState(int state)
     {
         mState = state;

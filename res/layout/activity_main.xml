@@ -10,16 +10,29 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="not connected" />
-    
-    <TextView
-        android:id="@+id/tvUID"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#000000"
-        android:textSize="30sp"
-        android:textStyle="italic" 
-        android:text="NULL" />
-	
+
+   <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+	   <TextView
+	        android:id="@+id/tvUIDText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textColor="#000000"
+	        android:textSize="30sp"
+	        android:textStyle="italic" 
+	        android:text="UserID:    " />
+       <TextView
+	        android:id="@+id/tvUID"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textColor="#000000"
+	        android:textSize="15sp"
+	        android:textStyle="italic" 
+	        android:text="NULL" />
+	    
+	    
+    </LinearLayout>
     <Button
         android:id="@+id/btnSetUID"
         android:layout_width="match_parent"
@@ -47,7 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"            
             android:fontFamily="Droid Mono"
-            android:text="Level :"
+            android:text="Average Temperature :"
             android:textColor="#000000"
             android:textSize="30sp"
             android:textStyle="italic" />
@@ -58,8 +71,33 @@
             android:layout_height="wrap_content"            
             android:fontFamily="Droid Mono"
             android:text="--"
+            android:textColor="#000000"           
+            android:textStyle="italic" />
+
+       
+    </LinearLayout>
+
+<LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/tvEDA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"            
+            android:fontFamily="Droid Mono"
+            android:text="Average EDA :"
             android:textColor="#000000"
-            
+            android:textSize="30sp"
+            android:textStyle="italic" />
+        
+        <TextView
+            android:id="@+id/tvEDAVaule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"            
+            android:fontFamily="Droid Mono"
+            android:text="--"
+            android:textColor="#000000"           
             android:textStyle="italic" />
 
        

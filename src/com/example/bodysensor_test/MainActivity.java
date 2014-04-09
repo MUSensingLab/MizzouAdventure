@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
@@ -50,6 +51,7 @@ public class MainActivity extends Activity
     public static final int MESSAGE_WRITE = 3;
     public static final int MESSAGE_DEVICE_NAME = 4;
     public static final int MESSAGE_TOAST = 5;
+    public static final int MESSAGE_LEISURE = 6;
     // Key names received from the DeviceConnect Handler
     public static final String DEVICE_NAME = "device_name";
     public static final String TOAST = "toast";     
@@ -75,9 +77,10 @@ public class MainActivity extends Activity
 	
 	private String UID = "null";
 	private TextView tvTest;
-	private TextView tvFright;
+	private TextView tvAvgTemp;
 	private TextView tvUID;
 	private String filename;
+	private TextView tvEDAVaule;
 	
 	private static Context context;
 	
@@ -86,6 +89,13 @@ public class MainActivity extends Activity
 	public String datatoWrite;
 	private TransmitData transmitData;
 	private DeviceConnect SensorConnect;
+	
+	private ArrayList<Float> TempList = null;
+	private ArrayList<Float> EDAList = null;
+	
+	private float avgTemp = 0;
+	private float avgEDA = 0;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	
@@ -98,11 +108,15 @@ public class MainActivity extends Activity
 		
 		context = this;
 		
+		TempList = new ArrayList<Float>();
+		EDAList = new ArrayList<Float>();
+		
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         tvSetData=(TextView)findViewById(R.id.tvSetData);
         tvUID=(TextView)findViewById(R.id.tvUID);
         tvTest=(TextView)findViewById(R.id.tvTest);
-        tvFright=(TextView)findViewById(R.id.tvFright);
+        tvAvgTemp=(TextView)findViewById(R.id.tvFright);
+        tvEDAVaule=(TextView)findViewById(R.id.tvEDAVaule);
         btnStart=(Button)findViewById(R.id.btnStart);
         btnCancel=(Button)findViewById(R.id.btnCancel);
         btnSetUID=(Button)findViewById(R.id.btnSetUID);
@@ -158,7 +172,12 @@ public class MainActivity extends Activity
 			public void onClick(View v) {
 				if (!UID.equals("null")){
 					startFlag = true;
-
+//					if (TempList!=null)
+//						TempList.clear();
+//					if (EDAList!=null)
+//						EDAList.clear();
+//					avgTemp = 0;
+//					avgEDA = 0;
 				} else {
 					Toast.makeText(getApplicationContext(),"User ID is not set.",Toast.LENGTH_LONG).show();
 				}
@@ -173,10 +192,28 @@ public class MainActivity extends Activity
 				// TODO Auto-generated method stub
 				startFlag = false;
 				UID = "null";
-				tvUID.setText(UID);
-				transmitData.cancel(true);
+				//tvUID.setText(UID);
+				//transmitData.cancel(true);
 				SensorConnect.disconnect();
-				tvSetData.setText("not connected");
+				//tvSetData.setText("not connected");
+				Iterator<Float> it = TempList.iterator();
+				while(it.hasNext()) {
+        			avgTemp += it.next().floatValue();
+        		}
+				avgTemp = avgTemp / TempList.size();
+				it = EDAList.iterator();
+				while(it.hasNext()) {
+        			avgEDA += it.next().floatValue();
+        		}
+				avgEDA = avgEDA / EDAList.size();
+				if (TempList!=null)
+					TempList.clear();
+				if (EDAList!=null)
+					EDAList.clear();
+				tvTest.setText(String.valueOf(avgTemp));
+				tvEDAVaule.setText(String.valueOf(avgEDA));
+				avgTemp = 0;
+				avgEDA = 0;
 			}
 	});
         
@@ -258,8 +295,8 @@ public class MainActivity extends Activity
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
-		super.onDestroy();
-		
+		SensorConnect.disconnect();
+		super.onDestroy();		
 		}
 
 
@@ -324,6 +361,8 @@ public class MainActivity extends Activity
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+	                	TempList.add(Float.parseFloat(splitString[5]));
+	                	EDAList.add(Float.parseFloat(splitString[6]));
 	                }
             	}
                 break;
